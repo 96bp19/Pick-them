@@ -9,6 +9,7 @@ public class HeadFollower : MonoBehaviour
 
     public Transform childPrefab;
     public Transform Child;
+    public HeadFollower Parent = null;
 
     
     Vector3 currentPos;
@@ -17,8 +18,7 @@ public class HeadFollower : MonoBehaviour
     public List<Vector3> previousPositions = new List<Vector3>();
     public List<Quaternion> previousRotations = new List<Quaternion>();
 
-    public  delegate void OnPlayerAdded(GameObject addedObj);
-    public static OnPlayerAdded playerAddedListeners;
+  
 
     
     private static float CurrentMoveSpeed;
@@ -28,9 +28,10 @@ public class HeadFollower : MonoBehaviour
         CurrentMoveSpeed = speed;
     }
 
+    Vector3 moveVel;
     private void FixedUpdate()
     {
-        if (CurrentMoveSpeed <=1f)
+        if (CurrentMoveSpeed <=5f)
         {
           
             return;
@@ -40,7 +41,11 @@ public class HeadFollower : MonoBehaviour
         {
             if (previousPositions.Count >= maxListAmount)
             {
-                Child.transform.position = Vector3.Slerp(previousPositions[0], Child.transform.position, 0.1f);
+                // Child.transform.position = Vector3.Slerp(previousPositions[0], Child.transform.position, 0.99f);
+                // Child.transform.position = Vector3.Lerp(previousPositions[0], Child.transform.position, 0.2f);
+                Child.transform.position = Vector3.SmoothDamp(Child.transform.position, previousPositions[0], ref moveVel, 0.1f);
+
+
                 Child.transform.rotation = previousRotations[0];
                 previousPositions.RemoveAt(0);
                 previousRotations.RemoveAt(0);
@@ -56,8 +61,23 @@ public class HeadFollower : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Z) && allowedSpawning)
         {
             Child = Instantiate(childPrefab);
+            // set this as a parent of newly spawned child
+            Child.GetComponent<HeadFollower>().Parent = this;
+            Child.name = "Child";
             allowedSpawning = false;
-            playerAddedListeners?.Invoke(Child.gameObject);
+            GameManager.AddPlayerFollower(Child.gameObject);
+        }
+        if (Input.GetKeyDown(KeyCode.X) && allowedSpawning)
+        {
+            if (Parent)
+            {
+            // remove self from the list
+                GameManager.RemovePlayerFollower(gameObject);
+                Parent.Child = null;
+                Parent.allowedSpawning = true;
+                Destroy(gameObject);
+
+            }
         }
     }
 

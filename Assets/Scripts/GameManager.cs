@@ -13,13 +13,13 @@ public class GameManager : MonoBehaviour
     private LevelGenerator _levelGeneratorInstance;
     private Player _PlayerInstance;
 
-    private List<GameObject> playerFollowers = new List<GameObject>();
+    private static List<GameObject> playerFollowers = new List<GameObject>();
 
     private void Start()
     {
         _inputHandlerInstance = Instantiate(InputHandlerPrefab);
         BeginGame();
-        HeadFollower.playerAddedListeners += AddPlayerFollower;
+      
     }
 
 
@@ -51,7 +51,7 @@ public class GameManager : MonoBehaviour
         _levelGeneratorInstance.initializePlayerPosition(_PlayerInstance);
     }
 
-    void RemovePlayerFollowers()
+    public static void RemovePlayerFollowers()
     {
         foreach (var item in playerFollowers)
         {
@@ -60,9 +60,13 @@ public class GameManager : MonoBehaviour
         playerFollowers.Clear();
     }
 
-    void AddPlayerFollower(GameObject addedObj)
+    public static void AddPlayerFollower(GameObject addedObj)
     {
         playerFollowers.Add(addedObj);
+    }
+    public static void RemovePlayerFollower(GameObject objToRemove)
+    {
+        playerFollowers.Remove(objToRemove);
     }
 
 
