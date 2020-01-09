@@ -4,14 +4,20 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    [Header("Waypoint Related")]
     public List<Transform> waypoints;
-    public float rotateSmoothness = 0.1f;
     public int currentIndex = 0;
-    public float moveSpeed = 2f;
+    public float rotateSmoothness = 0.1f;
+    
 
-    Rigidbody _rb;
 
-  
+    [Header(" Speed Related")]
+    public float maxSpeed = 20f;
+    public float currentSpeed;
+    public float acceleration = 60;
+    public float deacceleration = 30f;
+
+    private Rigidbody _rb;
 
     private void Start()
     {
@@ -25,6 +31,7 @@ public class Player : MonoBehaviour
         this.waypoints = waypoints;
     }
 
+    
     void checkForWaypoints()
     {
         if (waypoints == null)
@@ -33,7 +40,7 @@ public class Player : MonoBehaviour
           
         }
 
-        if (Vector3.Distance(transform.position, waypoints[currentIndex].position) < 0.9f)
+        if (Vector3.Distance(transform.position, waypoints[currentIndex].position) < 10f)
         {
             currentIndex++;
             currentIndex = currentIndex % waypoints.Count;
@@ -41,10 +48,18 @@ public class Player : MonoBehaviour
         
     }
 
+    private void Update()
+    {
+      
+        CalculateDesiredSpeed();
+        HeadFollower.SetCurrentHeadSpeed(currentSpeed);
+    }
+
     private void FixedUpdate()
     {
         if (waypoints != null)
         {
+            
              RotateTowardsWaypoint();
              MoveTowardsWaypoint();
 
@@ -52,7 +67,13 @@ public class Player : MonoBehaviour
     }
     void RotateTowardsWaypoint()
     {
-        Quaternion lookRot = Quaternion.LookRotation(waypoints[currentIndex].position - transform.position);
+        if (!InputHandler.Inputs.screenTouched)
+        {
+            return;
+        }
+        Vector3 lookDirection = (waypoints[currentIndex].position - transform.position);
+        lookDirection.y = 0;
+        Quaternion lookRot = Quaternion.LookRotation(lookDirection.normalized);
         Quaternion newLookRot = Quaternion.Lerp(transform.rotation, lookRot, rotateSmoothness);
         _rb.MoveRotation(newLookRot);
     }
@@ -65,6 +86,26 @@ public class Player : MonoBehaviour
         velocity.Normalize();
         // _rb.velocity = velocity * 3f;
         //transform.position += velocity*0.04f;
-        _rb.MovePosition(transform.forward * moveSpeed * Time.fixedDeltaTime+ transform.position);
+        _rb.MovePosition(transform.forward * currentSpeed * Time.fixedDeltaTime+ transform.position);
+    }
+
+
+   
+    void CalculateDesiredSpeed()
+    {
+        float desiredSpeed =  maxSpeed;
+        if (InputHandler.Inputs.screenTouched)
+        {
+            // moves
+            currentSpeed = Mathf.MoveTowards(currentSpeed, desiredSpeed, acceleration * Time.deltaTime);
+            
+        }
+        else
+        {
+            // deaccelerate
+           
+            desiredSpeed = 0;
+            currentSpeed = Mathf.MoveTowards(currentSpeed, desiredSpeed, deacceleration * Time.deltaTime);
+        }
     }
 }

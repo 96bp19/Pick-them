@@ -4,9 +4,12 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    public int noOfPlatformsTogenerate =5;
     public LevelGenerator levelGeneratorPrefab;
     public Player playerPrefab;
-    public int noOfPlatformsTogenerate =5;
+    public InputHandler InputHandlerPrefab;
+
+    private InputHandler _inputHandlerInstance;
     private LevelGenerator _levelGeneratorInstance;
     private Player _PlayerInstance;
 
@@ -14,6 +17,7 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        _inputHandlerInstance = Instantiate(InputHandlerPrefab);
         BeginGame();
         HeadFollower.playerAddedListeners += AddPlayerFollower;
     }

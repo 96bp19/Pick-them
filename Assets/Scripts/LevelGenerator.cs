@@ -87,7 +87,7 @@ public class LevelGenerator : MonoBehaviour
             }
             Gizmos.DrawSphere(wayPoints[i].transform.position, 0.2f);
             Gizmos.DrawLine(wayPoints[i].transform.position, wayPoints[i + 1].transform.position);
-            Debug.Log("ran : " + i);
+
 
 
         }

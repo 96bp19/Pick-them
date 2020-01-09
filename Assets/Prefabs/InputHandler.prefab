@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &865457773120018285
+--- !u!1 &4788314795082178511
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,45 +8,38 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 865457773120018287}
-  - component: {fileID: 865457773120018284}
+  - component: {fileID: 4788314795082178497}
+  - component: {fileID: 4788314795082178510}
   m_Layer: 0
-  m_Name: GameManager
+  m_Name: InputHandler
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &865457773120018287
+--- !u!4 &4788314795082178497
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 865457773120018285}
+  m_GameObject: {fileID: 4788314795082178511}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 18.539955, y: 0.5944154, z: 184.21184}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &865457773120018284
+--- !u!114 &4788314795082178510
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 865457773120018285}
+  m_GameObject: {fileID: 4788314795082178511}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 018ab8e8d532e4a45beec217ad760e7c, type: 3}
+  m_Script: {fileID: 11500000, guid: 3d7bbf01c8b05b049b631327f9dbb710, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  noOfPlatformsTogenerate: 5
-  levelGeneratorPrefab: {fileID: 5166099428247556791, guid: 83c040f12e37a3842be37a5f1a41775d,
-    type: 3}
-  playerPrefab: {fileID: 3719601492545230963, guid: e78a9519a56b3504aafa14d9c8f5df97,
-    type: 3}
-  InputHandlerPrefab: {fileID: 4788314795082178510, guid: 015f7f579f240b744a92ab0f305c3501,
-    type: 3}

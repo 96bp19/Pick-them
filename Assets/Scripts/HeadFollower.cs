@@ -19,15 +19,28 @@ public class HeadFollower : MonoBehaviour
 
     public  delegate void OnPlayerAdded(GameObject addedObj);
     public static OnPlayerAdded playerAddedListeners;
+
+    
+    private static float CurrentMoveSpeed;
+    
+    public static void SetCurrentHeadSpeed(float speed)
+    {
+        CurrentMoveSpeed = speed;
+    }
+
     private void FixedUpdate()
     {
-      
+        if (CurrentMoveSpeed <=1f)
+        {
+          
+            return;
+        }
 
         if (Child != null)
         {
             if (previousPositions.Count >= maxListAmount)
             {
-                Child.transform.position = previousPositions[0];
+                Child.transform.position = Vector3.Slerp(previousPositions[0], Child.transform.position, 0.1f);
                 Child.transform.rotation = previousRotations[0];
                 previousPositions.RemoveAt(0);
                 previousRotations.RemoveAt(0);
