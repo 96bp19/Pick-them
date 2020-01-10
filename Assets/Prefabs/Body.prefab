@@ -215,8 +215,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d6963487c559bfd4294bb469b6a87020, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxListAmount: 20
+  maxListAmount: 10
   childPrefab: {fileID: 7735612899379451954}
   Child: {fileID: 0}
-  previousPositions: []
-  previousRotations: []
+  Parent: {fileID: 0}

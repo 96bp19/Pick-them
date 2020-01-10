@@ -8,15 +8,17 @@ public class HeadFollower : MonoBehaviour
     public int maxListAmount = 20;
 
     public Transform childPrefab;
+    [HideInInspector]
     public Transform Child;
+    [HideInInspector]
     public HeadFollower Parent = null;
 
     
     Vector3 currentPos;
     bool allowedSpawning = true;
 
-    public List<Vector3> previousPositions = new List<Vector3>();
-    public List<Quaternion> previousRotations = new List<Quaternion>();
+    private List<Vector3> previousPositions = new List<Vector3>();
+    private List<Quaternion> previousRotations = new List<Quaternion>();
 
   
 
@@ -67,6 +69,12 @@ public class HeadFollower : MonoBehaviour
             allowedSpawning = false;
             GameManager.AddPlayerFollower(Child.gameObject);
         }
+
+        if (SpawnRequest)
+        {
+            SpawnNewBody();
+        }
+
         if (Input.GetKeyDown(KeyCode.X) && allowedSpawning)
         {
             if (Parent)
@@ -78,6 +86,27 @@ public class HeadFollower : MonoBehaviour
                 Destroy(gameObject);
 
             }
+        }
+    }
+
+    private static bool SpawnRequest;
+   
+    public static void setSpawnRequest(bool val = true)
+    {
+        SpawnRequest = val;
+    }
+
+    private void SpawnNewBody()
+    {
+        if (allowedSpawning)
+        {
+            Child = Instantiate(childPrefab);
+            // set this as a parent of newly spawned child
+            Child.GetComponent<HeadFollower>().Parent = this;
+            Child.name = "Child";
+            allowedSpawning = false;
+            GameManager.AddPlayerFollower(Child.gameObject);
+            SpawnRequest = false;
         }
     }
 
