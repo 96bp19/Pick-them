@@ -53,6 +53,7 @@ public class Player : MonoBehaviour
       
         CalculateDesiredSpeed();
         HeadFollower.SetCurrentHeadSpeed(currentSpeed);
+       
     }
 
     private void FixedUpdate()

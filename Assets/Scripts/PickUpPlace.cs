@@ -22,7 +22,8 @@ public class PickUpPlace : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            HeadFollower.setSpawnRequest(allowedPicking);
+           
+            HeadFollower.setSpawnRequest(transform.position,allowedPicking);
         }
     }
 }

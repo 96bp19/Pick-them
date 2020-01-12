@@ -24,6 +24,8 @@ public class HeadFollower : MonoBehaviour
 
     
     private static float CurrentMoveSpeed;
+    private static Vector3 childSpawnPos;
+    
     
     public static void SetCurrentHeadSpeed(float speed)
     {
@@ -60,6 +62,7 @@ public class HeadFollower : MonoBehaviour
 
     private void Update()
     {
+        // u can remove this if statement if testing is not required
         if (Input.GetKeyDown(KeyCode.Z) && allowedSpawning)
         {
             Child = Instantiate(childPrefab);
@@ -70,11 +73,13 @@ public class HeadFollower : MonoBehaviour
             GameManager.AddPlayerFollower(Child.gameObject);
         }
 
+        // this is actual method to spawn follower
         if (SpawnRequest)
         {
             SpawnNewBody();
         }
 
+        // this is test only code
         if (Input.GetKeyDown(KeyCode.X) && allowedSpawning)
         {
             if (Parent)
@@ -91,8 +96,9 @@ public class HeadFollower : MonoBehaviour
 
     private static bool SpawnRequest;
    
-    public static void setSpawnRequest(bool val = true)
+    public static void setSpawnRequest(Vector3 spawnPos , bool val = true )
     {
+        childSpawnPos = spawnPos;
         SpawnRequest = val;
     }
 
@@ -101,9 +107,11 @@ public class HeadFollower : MonoBehaviour
         if (allowedSpawning)
         {
             Child = Instantiate(childPrefab);
+
             // set this as a parent of newly spawned child
             Child.GetComponent<HeadFollower>().Parent = this;
             Child.name = "Child";
+            Child.transform.position = childSpawnPos;
             allowedSpawning = false;
             GameManager.AddPlayerFollower(Child.gameObject);
             SpawnRequest = false;
