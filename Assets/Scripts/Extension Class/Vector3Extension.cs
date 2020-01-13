@@ -9,6 +9,11 @@ public static class Vector3Extension
         return new Vector3(x ?? original.x, y ?? original.y, z ?? original.z);
     }
 
+    public static Vector3 IncreaseBy(this Vector3 originalPos , float? x = null, float? y= null, float? z = null)
+    {
+        return new Vector3(originalPos.x + x ?? originalPos.x, originalPos.y + y ?? originalPos.y, originalPos.z + z ?? originalPos.z);
+    }
+
     public static Vector3 DirectionTo(this Vector3 source, Vector3 destination)
     {
         return Vector3.Normalize(destination - source);

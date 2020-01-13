@@ -10,7 +10,7 @@ public class LevelGenerator : MonoBehaviour
     public bool debugMode = false;
 
     // list of generated platform
-    private List<Transform> generatedPlatforms = new List<Transform>();
+   [SerializeField] private List<Transform> generatedPlatforms = new List<Transform>();
 
     // list of waypoints inside generated platforms
     public List<Transform> wayPoints = new List<Transform>();
@@ -26,6 +26,7 @@ public class LevelGenerator : MonoBehaviour
         Vector3 platformPosition = Vector3.zero;
         for (int i = 0; i < noOfPlatformToGenerate; i++)
         {
+            // 40 here is the length of the road prefabs
            platformPosition.z = i*40;
 
            spawnedPlatform =  Instantiate(levelPrefab[Random.Range(0,levelPrefab.Length)]).transform;
@@ -36,6 +37,8 @@ public class LevelGenerator : MonoBehaviour
            platformPosition.x += path.myXoffset;
            AddWaypointsToList(path);
            spawnedPlatform.localPosition = platformPosition;
+
+            SpawnAIRoad(i,noOfPlatformToGenerate,platformPosition);
            
             
         }
@@ -68,6 +71,25 @@ public class LevelGenerator : MonoBehaviour
     {
         player.transform.position = wayPoints[0].transform.position+  new Vector3(0,1f,0);
         player.initializePlayerWaypoints(wayPoints);
+    }
+
+    Vector3 AI_pos;
+    public GameObject AI_pathPrefab;
+    public void SpawnAIRoad(int currentIndex, int maxPlatformGenerationCount , Vector3 platformpos)
+    {
+        if (RandomBool() && currentIndex != 0 && currentIndex < maxPlatformGenerationCount-1)
+        { 
+            Transform airoad =   Instantiate(AI_pathPrefab).transform;
+            airoad.localRotation = Quaternion.Euler(0, 90, 0);
+            airoad.localPosition = platformpos.IncreaseBy(x: 60);
+            generatedPlatforms.Add(airoad);
+            airoad.SetParent(transform);
+        }
+    }
+
+    bool RandomBool()
+    {
+        return Random.Range(0, 2) == 0;
     }
 
     private void OnDrawGizmos()
