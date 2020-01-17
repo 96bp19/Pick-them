@@ -45,10 +45,8 @@ public class HeadFollower : MonoBehaviour
         {
             if (previousPositions.Count >= maxListAmount)
             {
-                // Child.transform.position = Vector3.Slerp(previousPositions[0], Child.transform.position, 0.99f);
-                // Child.transform.position = Vector3.Lerp(previousPositions[0], Child.transform.position, 0.2f);
+           
                 Child.transform.position = Vector3.SmoothDamp(Child.transform.position, previousPositions[0], ref moveVel, 0.1f);
-
 
                 Child.transform.rotation = previousRotations[0];
                 previousPositions.RemoveAt(0);
@@ -63,14 +61,9 @@ public class HeadFollower : MonoBehaviour
     private void Update()
     {
         // u can remove this if statement if testing is not required
-        if (Input.GetKeyDown(KeyCode.Z) && allowedSpawning)
+        if (Input.GetKeyDown(KeyCode.Z))
         {
-            Child = Instantiate(childPrefab);
-            // set this as a parent of newly spawned child
-            Child.GetComponent<HeadFollower>().Parent = this;
-            Child.name = "Child";
-            allowedSpawning = false;
-            GameManager.AddPlayerFollower(Child.gameObject);
+            SpawnRequest = true;
         }
 
         // this is actual method to spawn follower
@@ -78,28 +71,30 @@ public class HeadFollower : MonoBehaviour
         {
             SpawnNewBody();
         }
+        if (RemoveRequest)
+        {
+            RemoveBody();
+        }
 
         // this is test only code
-        if (Input.GetKeyDown(KeyCode.X) && allowedSpawning)
+        if (Input.GetKeyDown(KeyCode.X))
         {
-            if (Parent)
-            {
-            // remove self from the list
-                GameManager.RemovePlayerFollower(gameObject);
-                Parent.Child = null;
-                Parent.allowedSpawning = true;
-                Destroy(gameObject);
-
-            }
+            setRemoveRequest(true);
         }
     }
 
     private static bool SpawnRequest;
+    private static bool RemoveRequest;
    
     public static void setSpawnRequest(Vector3 spawnPos , bool val = true )
     {
         childSpawnPos = spawnPos;
         SpawnRequest = val;
+    }
+
+    public static void setRemoveRequest(bool val = true)
+    {
+        RemoveRequest = val;
     }
 
     private void SpawnNewBody()
@@ -115,6 +110,23 @@ public class HeadFollower : MonoBehaviour
             allowedSpawning = false;
             GameManager.AddPlayerFollower(Child.gameObject);
             SpawnRequest = false;
+        }
+    }
+
+    private void RemoveBody()
+    {
+        Debug.Log("remove body has parent : " + Parent);
+       // setRemoveRequest(false);
+        if (Parent && allowedSpawning )
+        {
+            Debug.Log("called from : " + name);
+            // remove self from the list
+          
+            GameManager.RemovePlayerFollower(gameObject);
+            Parent.Child = null;
+            Parent.allowedSpawning = true;
+            Destroy(gameObject);
+            setRemoveRequest(false);
         }
     }
 
